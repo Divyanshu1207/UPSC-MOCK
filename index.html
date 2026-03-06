@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>UPSC Mock Test</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>UPSC Mock Test</h1>
+
+<div id="start">
+<input id="name" placeholder="Enter your name">
+<button onclick="startTest()">Start Test</button>
+</div>
+
+<div id="test" style="display:none">
+
+<div class="container">
+
+<div class="pdf">
+<iframe src="question_paper.pdf" width="100%" height="600"></iframe>
+</div>
+
+<div class="omr" id="omr"></div>
+
+</div>
+
+<div class="timer">Time Left: <span id="time">120:00</span></div>
+
+<button onclick="submitTest()">Submit</button>
+
+</div>
+
+<div id="result"></div>
+
+<script src="answers.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
