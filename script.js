@@ -26,6 +26,7 @@ Q${i}
 <label><input type="radio" name="q${i}" value="B">B</label>
 <label><input type="radio" name="q${i}" value="C">C</label>
 <label><input type="radio" name="q${i}" value="D">D</label>
+<button onclick="clearResponse(${i})">Clear</button>
 `;
 
 omr.appendChild(div);
@@ -100,6 +101,10 @@ Score: ${score}<br>
 Correct: ${correct}<br>
 Wrong: ${wrong}<br>
 Unattempted: ${100-correct-wrong}
+<br><br>
+<a href="solution.pdf" download>
+<button>Download Solution PDF</button>
+</a>
 `;
 
 }
