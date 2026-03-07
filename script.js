@@ -36,11 +36,13 @@ omr.appendChild(div);
 }
 
 function clearResponse(i){
-let radios = document.getElementsByName(`q${i}`);
 
-for(let j=0;j<radios.length;j++){
-radios[j].checked = false;
+let selected = document.querySelector(`input[name="q${i}"]:checked`);
+
+if(selected){
+selected.checked = false;
 }
+
 }
 
 function startTimer(){
