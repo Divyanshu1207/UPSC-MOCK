@@ -22,30 +22,15 @@ div.className="question";
 
 div.innerHTML = `
 Q${i}
-<label><input type="radio" name="q${i}" value="A" onclick="toggleRadio(this)">A</label>
-<label><input type="radio" name="q${i}" value="B" onclick="toggleRadio(this)">B</label>
-<label><input type="radio" name="q${i}" value="C" onclick="toggleRadio(this)">C</label>
-<label><input type="radio" name="q${i}" value="D" onclick="toggleRadio(this)">D</label>
+<label><input type="radio" name="q${i}" value="A">A</label>
+<label><input type="radio" name="q${i}" value="B">B</label>
+<label><input type="radio" name="q${i}" value="C">C</label>
+<label><input type="radio" name="q${i}" value="D">D</label>
+<button onclick="clearResponse(${i})">Clear</button>
 `;
 
 omr.appendChild(div);
 
-}
-
-}
-
-function toggleRadio(radio){
-
-if(radio.dataset.checked === "true"){
-radio.checked = false;
-radio.dataset.checked = "false";
-}else{
-
-let group = document.querySelectorAll(`input[name="${radio.name}"]`);
-
-group.forEach(r => r.dataset.checked = "false");
-
-radio.dataset.checked = "true";
 }
 
 }
