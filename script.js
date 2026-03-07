@@ -26,13 +26,21 @@ Q${i}
 <label><input type="radio" name="q${i}" value="B">B</label>
 <label><input type="radio" name="q${i}" value="C">C</label>
 <label><input type="radio" name="q${i}" value="D">D</label>
-<button onclick="clearResponse(${i})">Clear</button>
+<button type="button" onclick="clearResponse(${i})">Clear</button>
 `;
 
 omr.appendChild(div);
 
 }
 
+}
+
+function clearResponse(i){
+let radios = document.getElementsByName(`q${i}`);
+
+for(let j=0;j<radios.length;j++){
+radios[j].checked = false;
+}
 }
 
 function startTimer(){
