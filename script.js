@@ -215,7 +215,7 @@ rowColor = "style='background-color:#ffcccc;'";
 }
 
 resultHTML += `
-<tr>
+<tr ${rowColor}>
 <td>${i+1}</td>
 <td>${user}</td>
 <td>${correctAns}</td>
@@ -229,5 +229,6 @@ resultHTML += `
 resultHTML += "</table>";
 
 document.getElementById("result").innerHTML=resultHTML;
+
 
 }
