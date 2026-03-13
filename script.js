@@ -208,6 +208,11 @@ status="Correct";
 else{
 status="Wrong";
 }
+let rowColor = "";
+
+if(status == "Wrong"){
+rowColor = "style='background-color:#ffcccc;'";
+}
 
 resultHTML += `
 <tr>
