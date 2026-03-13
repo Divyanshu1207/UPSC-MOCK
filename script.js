@@ -3,27 +3,48 @@ let timer = 7200;
 
 let answerKey = "";
 let solutions = [];
+let dataLoaded = false;
 
-// LOAD CSV
-fetch("answers.csv")
-.then(res => res.text())
+
+// LOAD CSV FILE
+fetch("answer.csv")
+.then(response => response.text())
 .then(data => {
 
 let rows = data.trim().split("\n");
 
-rows.forEach((row,i) => {
+// remove header if present
+if(rows[0].toLowerCase().includes("answer")){
+rows.shift();
+}
+
+rows.forEach(row => {
 
 let parts = row.split(",");
 
-answerKey += parts[0].trim();
-solutions.push(parts.slice(1).join(","));
+// remove Windows \r
+let ans = parts[0].trim().replace("\r","");
+
+answerKey += ans;
+
+solutions.push(parts.slice(1).join(",").trim());
 
 });
 
+console.log("Answers loaded:", answerKey.length);
+dataLoaded = true;
+})
+.catch(err=>{
+console.error("CSV load error:",err);
 });
 
 
 function startTest(){
+
+if(!dataLoaded){
+alert("Answers still loading. Please wait.");
+return;
+}
 
 document.getElementById("start").style.display="none";
 document.getElementById("test").style.display="block";
@@ -32,6 +53,7 @@ generateOMR();
 startTimer();
 
 }
+
 
 
 function generateOMR(){
@@ -58,15 +80,15 @@ omr.appendChild(div);
 }
 
 
+
 function toggleRadio(radio){
 
-if(radio.dataset.checked === "true"){
+if(radio.dataset.checked==="true"){
 
 radio.checked=false;
 radio.dataset.checked="false";
 
-}
-else{
+}else{
 
 let group=document.querySelectorAll(`input[name="${radio.name}"]`);
 
@@ -79,9 +101,10 @@ radio.dataset.checked="true";
 }
 
 
+
 function startTimer(){
 
-setInterval(()=>{
+let interval=setInterval(()=>{
 
 timer--;
 
@@ -89,13 +112,17 @@ let minutes=Math.floor(timer/60);
 let seconds=timer%60;
 
 document.getElementById("time").innerText =
-minutes+":"+seconds;
+minutes+":"+String(seconds).padStart(2,"0");
 
-if(timer<=0) submitTest();
+if(timer<=0){
+clearInterval(interval);
+submitTest();
+}
 
-},1000)
+},1000);
 
 }
+
 
 
 function submitTest(){
@@ -114,6 +141,7 @@ userAnswers[i-1]=selected.value;
 calculateScore();
 
 }
+
 
 
 function calculateScore(){
@@ -139,10 +167,9 @@ wrong++;
 
 document.getElementById("test").style.display="none";
 
-
 let resultHTML = `
 <h2>Result</h2>
-Score: ${score}<br>
+Score: ${score.toFixed(2)}<br>
 Correct: ${correct}<br>
 Wrong: ${wrong}<br>
 Unattempted: ${100-correct-wrong}
@@ -155,7 +182,7 @@ Unattempted: ${100-correct-wrong}
 
 <h3>Answer Analysis</h3>
 
-<table border="1" cellpadding="5">
+<table border="1" cellpadding="6">
 <tr>
 <th>Q</th>
 <th>Your Answer</th>
@@ -164,7 +191,6 @@ Unattempted: ${100-correct-wrong}
 <th>Explanation</th>
 </tr>
 `;
-
 
 for(let i=0;i<100;i++){
 
@@ -189,7 +215,7 @@ resultHTML += `
 <td>${user}</td>
 <td>${correctAns}</td>
 <td>${status}</td>
-<td>${solutions[i]}</td>
+<td>${solutions[i] || ""}</td>
 </tr>
 `;
 
