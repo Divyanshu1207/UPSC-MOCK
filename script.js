@@ -1,6 +1,28 @@
 let userAnswers = Array(100).fill("");
 let timer = 7200;
 
+let answerKey = "";
+let solutions = [];
+
+// LOAD CSV
+fetch("answers.csv")
+.then(res => res.text())
+.then(data => {
+
+let rows = data.trim().split("\n");
+
+rows.forEach((row,i) => {
+
+let parts = row.split(",");
+
+answerKey += parts[0].trim();
+solutions.push(parts.slice(1).join(","));
+
+});
+
+});
+
+
 function startTest(){
 
 document.getElementById("start").style.display="none";
@@ -10,6 +32,7 @@ generateOMR();
 startTimer();
 
 }
+
 
 function generateOMR(){
 
@@ -33,21 +56,28 @@ omr.appendChild(div);
 }
 
 }
+
+
 function toggleRadio(radio){
 
 if(radio.dataset.checked === "true"){
-radio.checked = false;
-radio.dataset.checked = "false";
-}else{
 
-let group = document.querySelectorAll(`input[name="${radio.name}"]`);
+radio.checked=false;
+radio.dataset.checked="false";
 
-group.forEach(r => r.dataset.checked = "false");
+}
+else{
 
-radio.dataset.checked = "true";
+let group=document.querySelectorAll(`input[name="${radio.name}"]`);
+
+group.forEach(r=>r.dataset.checked="false");
+
+radio.dataset.checked="true";
+
 }
 
 }
+
 
 function startTimer(){
 
@@ -67,6 +97,7 @@ if(timer<=0) submitTest();
 
 }
 
+
 function submitTest(){
 
 for(let i=1;i<=100;i++){
@@ -83,6 +114,7 @@ userAnswers[i-1]=selected.value;
 calculateScore();
 
 }
+
 
 function calculateScore(){
 
@@ -107,19 +139,64 @@ wrong++;
 
 document.getElementById("test").style.display="none";
 
-document.getElementById("result").innerHTML=
 
-`
+let resultHTML = `
 <h2>Result</h2>
 Score: ${score}<br>
 Correct: ${correct}<br>
 Wrong: ${wrong}<br>
 Unattempted: ${100-correct-wrong}
+
 <br><br>
+
 <a href="solution.pdf" download>
 <button>Download Solution PDF</button>
 </a>
+
+<h3>Answer Analysis</h3>
+
+<table border="1" cellpadding="5">
+<tr>
+<th>Q</th>
+<th>Your Answer</th>
+<th>Correct Answer</th>
+<th>Status</th>
+<th>Explanation</th>
+</tr>
+`;
+
+
+for(let i=0;i<100;i++){
+
+let user = userAnswers[i] || "-";
+let correctAns = answers[i];
+
+let status;
+
+if(user=="-"){
+status="Unattempted";
+}
+else if(user==correctAns){
+status="Correct";
+}
+else{
+status="Wrong";
+}
+
+resultHTML += `
+<tr>
+<td>${i+1}</td>
+<td>${user}</td>
+<td>${correctAns}</td>
+<td>${status}</td>
+<td>${solutions[i]}</td>
+</tr>
 `;
 
 }
 
+resultHTML += "</table>";
+
+document.getElementById("result").innerHTML=resultHTML;
+
+}
