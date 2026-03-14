@@ -5,6 +5,21 @@ let answerKey = "";
 let solutions = [];
 let dataLoaded = false;
 
+function openFullscreen(){
+
+let elem = document.documentElement;
+
+if (elem.requestFullscreen) {
+elem.requestFullscreen();
+}
+else if (elem.webkitRequestFullscreen) { // Safari
+elem.webkitRequestFullscreen();
+}
+else if (elem.msRequestFullscreen) { // IE
+elem.msRequestFullscreen();
+}
+
+}
 
 // LOAD CSV FILE
 fetch("answer.csv")
@@ -45,7 +60,7 @@ if(!dataLoaded){
 alert("Answers still loading. Please wait.");
 return;
 }
-
+openFullscreen();
 document.getElementById("start").style.display="none";
 document.getElementById("test").style.display="block";
 
@@ -145,7 +160,9 @@ calculateScore();
 
 
 function calculateScore(){
-
+if(document.fullscreenElement){
+document.exitFullscreen();
+}
 let answers = answerKey.split("");
 
 let score=0;
