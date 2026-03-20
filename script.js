@@ -154,7 +154,6 @@ userAnswers[i-1]=selected.value;
 }
 
 calculateScore();
-downloadResultPDF();
 }
 
 function downloadResultPDF(){
@@ -261,6 +260,8 @@ resultHTML += `
 resultHTML += "</table>";
 
 document.getElementById("result").innerHTML=resultHTML;
-
+setTimeout(() => {
+downloadResultPDF();
+}, 500);
 
 }
